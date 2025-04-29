@@ -49,14 +49,14 @@ const Checker = () => {
       <Card className="bg-[#0d4154de] shadow-md border-0">
         <CardContent className="p-6 flex flex-col items-center gap-4">
           <div className="flex-1 w-full">
-            <Label htmlFor="domain" className="block text-white mb-4">Domain Name</Label>
+            <Label htmlFor="domain" className="block text-white mb-4 font-bold">Domain Name</Label>
             <div className="flex items-center md:flex-row flex-col gap-2">
               <Input
                 id="domain"
                 placeholder="Enter domain name..."
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
-                className="w-full h-[50px] text-white rounded-none"
+                className="w-full h-[50px] text-white rounded-none placeholder:text-white"
               />
 
               {/* QR Modal Trigger */}
