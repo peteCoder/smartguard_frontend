@@ -3,6 +3,8 @@ import { useState } from "react"
 import { QrCode, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 
+import { FadeInWhenVisible } from "@/components/main/FadeInWhenVisible"
+
 // ShadCN UI
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -39,14 +41,20 @@ const Checker = () => {
     <div className="  px-4 py-10 max-w-4xl mx-auto">
       {/* min-h-screen */}
       {/* Title */}
+      <FadeInWhenVisible>
       <h1 className="font-bold text-center mb-2  text-2xl md:text-3xl text-[#0093b9]">CHECKER TOOL</h1>
+      </FadeInWhenVisible>
+
+      <FadeInWhenVisible>
       <p className="text-center text-white mb-8 text-sm md:text-base">
         Use this tool to check if a specific domain name is available or to receive suggestions for alternative domain names that match your input. 
         Simply type your desired domain in the input field below. Additionally, if you have a QR Code image that contains domain information, 
         you can upload it using the "Upload QR Code" button. After uploading, you can preview the image and remove it if needed before submitting.
       </p>
+      </FadeInWhenVisible>
 
       {/* Form */}
+      <FadeInWhenVisible>
       <Card className="bg-[#0d4154de] shadow-md border-0">
         <CardContent className="p-6 flex flex-col items-center gap-4">
           <div className="flex-1 w-full">
@@ -119,6 +127,7 @@ const Checker = () => {
           <Button className="h-[50px] w-full">Submit</Button>
         </CardContent>
       </Card>
+      </FadeInWhenVisible>
     </div>
   )
 }
