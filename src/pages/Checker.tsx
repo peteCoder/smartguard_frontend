@@ -36,7 +36,8 @@ const Checker = () => {
   })
 
   return (
-    <div className="min-h-screen px-4 py-10 max-w-4xl mx-auto">
+    <div className="  px-4 py-10 max-w-4xl mx-auto">
+      {/* min-h-screen */}
       {/* Title */}
       <h1 className="font-bold text-center mb-2  text-2xl md:text-3xl text-[#0093b9]">CHECKER TOOL</h1>
       <p className="text-center text-white mb-8 text-sm md:text-base">

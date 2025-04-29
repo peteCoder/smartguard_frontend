@@ -23,7 +23,7 @@ const Hero = () => {
           <div className="flex items-center justify-center sm:justify-start">
             <FadeInWhenVisible>
             <Button asChild variant={"secondary"} className="mt-6">
-              <a href="/">
+              <a href="/checker-tool">
                 USE THE CHECKER TOOL
               </a>
             </Button>
