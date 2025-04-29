@@ -1,32 +1,17 @@
 import { X, Menu  } from "lucide-react"
 import { useLayoutEffect, useState } from "react"
-import { NavLink, useNavigate } from "react-router"
-import { cn } from "@/lib/utils"
-
-
-
-const navItems = [
-    {
-        id: 1,
-        linkName: "Home",
-        path: "/"
-    },
-    {
-        id: 2,
-        linkName: "About",
-        path: "/about"
-    },
-    {
-        id: 3,
-        linkName: "Checker Tool",
-        path: "/checker-tool"
-    },
-]
+import { NavLink, useLocation, useNavigate } from "react-router"
+import { cn, navItems } from "@/lib/utils"
 
 
 const Navbar = () => {
     const [toggleNavbar, setToggleNavbar] = useState(false);
+
     const navigate = useNavigate();
+    const location = useLocation();
+
+
+    
 
     // navigate("/")
 
@@ -60,7 +45,9 @@ const Navbar = () => {
 
                     <ul className="md:flex items-center gap-3 hidden" >
                         {navItems.map((item) => (
-                            <div className={"text-white hover:text-[#0093b9] uppercase cursor-pointer"} onClick={() => goToPage(item.path)}>{item.linkName}</div>
+                            <div className={cn("text-white hover:text-[#0093b9] uppercase cursor-pointer", location.pathname === item.path && "text-[#0093b9]" )} onClick={() => goToPage(item.path)}>
+                                {item.linkName}
+                            </div>
                         ))}
                     </ul>
 
@@ -76,7 +63,7 @@ const Navbar = () => {
             <div className={cn("md:hidden block bg-[#0093b9] duration-500 ease-in-out transition-all overflow-hidden", toggleNavbar ? "h-[calc(60vh-70px)]" : "h-0")}>
                 <ul className="h-full flex items-start justify-start pt-[30px]  gap-10 flex-col p-4" >
                     {navItems.map((item) => (
-                        <div className={"text-white font-bold uppercase cursor-pointer"} onClick={() => goToPage(item.path)}>{item.linkName}</div>
+                        <div className={cn("text-white font-bold uppercase cursor-pointer", location.pathname === item.path && "text-[#011b2c]" )} onClick={() => goToPage(item.path)}>{item.linkName}</div>
                     ))}
                 </ul>
             </div>

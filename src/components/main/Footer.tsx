@@ -1,8 +1,14 @@
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
+import { FadeInWhenVisible } from "./FadeInWhenVisible";
+import { cn, navItems } from "@/lib/utils";
 
 const Footer = () => {
+
+  const location = useLocation();
   return (
+    <FadeInWhenVisible>
     <footer className="bg-[#08304b] text-gray-300 py-10 mt-10">
+      
       <div className="max-w-[70rem] mx-auto px-4 flex flex-col items-center">
         
         {/* Logo */}
@@ -12,24 +18,15 @@ const Footer = () => {
 
         {/* Navigation Links */}
         <ul className="flex flex-wrap justify-center gap-6 mb-6">
-          <NavLink
-            to="/"
-            className="hover:text-[#4fb3d4] font-semibold uppercase text-sm"
+          {navItems.map((item) => (
+            <NavLink
+            to={item.path}
+            className={cn("hover:text-[#4fb3d4] font-semibold uppercase text-sm", location.pathname === item.path && "text-[#4fb3d4]")}
           >
-            Home
+            {item.linkName}
           </NavLink>
-          <NavLink
-            to="/"
-            className="hover:text-[#4fb3d4] font-semibold uppercase text-sm"
-          >
-            About
-          </NavLink>
-          <NavLink
-            to="/"
-            className="hover:text-[#4fb3d4] font-semibold uppercase text-sm"
-          >
-            Checker Tool
-          </NavLink>
+          ))}
+          
         </ul>
 
         {/* Copyright */}
@@ -37,7 +34,9 @@ const Footer = () => {
           © {new Date().getFullYear()} SmartGuard. All rights reserved.
         </p>
       </div>
+      
     </footer>
+    </FadeInWhenVisible>
   );
 };
 
