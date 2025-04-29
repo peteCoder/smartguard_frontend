@@ -1,9 +1,39 @@
 import { X, Menu  } from "lucide-react"
 import { useLayoutEffect, useState } from "react"
-import { NavLink } from "react-router"
+import { NavLink, useNavigate } from "react-router"
 import { cn } from "@/lib/utils"
+
+
+
+const navItems = [
+    {
+        id: 1,
+        linkName: "Home",
+        path: "/"
+    },
+    {
+        id: 2,
+        linkName: "About",
+        path: "/about"
+    },
+    {
+        id: 3,
+        linkName: "Checker Tool",
+        path: "/checker-tool"
+    },
+]
+
+
 const Navbar = () => {
     const [toggleNavbar, setToggleNavbar] = useState(false);
+    const navigate = useNavigate();
+
+    // navigate("/")
+
+    const goToPage = (link: string) => {
+        setToggleNavbar(false);
+        navigate(link);
+    }
 
     useLayoutEffect(() => {
         const body = document.body;
@@ -29,9 +59,9 @@ const Navbar = () => {
                     </NavLink>
 
                     <ul className="md:flex items-center gap-3 hidden" >
-                        <NavLink className={"text-white hover:text-[#0093b9] uppercase"} to={"/"}>Home</NavLink>
-                        <NavLink className={"text-white hover:text-[#0093b9] uppercase"} to={"/"}>About</NavLink>
-                        <NavLink className={"text-white hover:text-[#0093b9] uppercase"} to={"/"}>Checker Tool</NavLink>
+                        {navItems.map((item) => (
+                            <div className={"text-white hover:text-[#0093b9] uppercase cursor-pointer"} onClick={() => goToPage(item.path)}>{item.linkName}</div>
+                        ))}
                     </ul>
 
                     <div onClick={() => setToggleNavbar((prev) => !prev)} className="md:hidden block cursor-pointer">
@@ -43,11 +73,11 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu */}
-            <div className={cn("md:hidden block bg-[#0093b9] duration-500 ease-in-out transition-all overflow-hidden", toggleNavbar ? "h-[calc(100vh-70px)]" : "h-0")}>
+            <div className={cn("md:hidden block bg-[#0093b9] duration-500 ease-in-out transition-all overflow-hidden", toggleNavbar ? "h-[calc(60vh-70px)]" : "h-0")}>
                 <ul className="h-full flex items-start justify-start pt-[30px]  gap-10 flex-col p-4" >
-                    <NavLink className={" text-white font-bold uppercase"} to={"/"}>Home</NavLink>
-                    <NavLink className={" text-white font-bold uppercase"} to={"/"}>About</NavLink>
-                    <NavLink className={" text-white font-bold uppercase"} to={"/"}>Checker Tool</NavLink>
+                    {navItems.map((item) => (
+                        <div className={"text-white font-bold uppercase cursor-pointer"} onClick={() => goToPage(item.path)}>{item.linkName}</div>
+                    ))}
                 </ul>
             </div>
         </div>
