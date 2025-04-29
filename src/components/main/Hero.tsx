@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { FadeInWhenVisible } from "./FadeInWhenVisible";
-
+import { NavLink } from "react-router";
 const Hero = () => {
   return (
     <div className="">
@@ -23,9 +23,9 @@ const Hero = () => {
           <div className="flex items-center justify-center sm:justify-start">
             <FadeInWhenVisible>
             <Button asChild variant={"secondary"} className="mt-6">
-              <a href="/checker-tool">
+              <NavLink to="/checker-tool">
                 USE THE CHECKER TOOL
-              </a>
+              </NavLink>
             </Button>
             </FadeInWhenVisible>
           </div>
