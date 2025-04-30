@@ -3,7 +3,6 @@ import { FadeInWhenVisible } from "./FadeInWhenVisible";
 import { cn, navItems } from "@/lib/utils";
 
 const Footer = () => {
-
   const location = useLocation();
   return (
     <FadeInWhenVisible>
@@ -20,6 +19,7 @@ const Footer = () => {
         <ul className="flex flex-wrap justify-center gap-6 mb-6">
           {navItems.map((item) => (
             <NavLink
+            key={item.id} 
             to={item.path}
             className={cn("hover:text-[#4fb3d4] font-semibold uppercase text-sm", location.pathname === item.path && "text-[#4fb3d4]")}
           >

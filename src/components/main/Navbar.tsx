@@ -45,7 +45,7 @@ const Navbar = () => {
 
                     <ul className="md:flex items-center gap-3 hidden" >
                         {navItems.map((item) => (
-                            <div className={cn("text-white hover:text-[#0093b9] uppercase cursor-pointer", location.pathname === item.path && "text-[#0093b9]" )} onClick={() => goToPage(item.path)}>
+                            <div key={item.id} className={cn("text-white hover:text-[#0093b9] uppercase cursor-pointer", location.pathname === item.path && "text-[#0093b9]" )} onClick={() => goToPage(item.path)}>
                                 {item.linkName}
                             </div>
                         ))}
@@ -63,7 +63,7 @@ const Navbar = () => {
             <div className={cn("md:hidden block bg-[#0093b9] duration-500 ease-in-out transition-all overflow-hidden", toggleNavbar ? "h-[calc(60vh-70px)]" : "h-0")}>
                 <ul className="h-full flex items-start justify-start pt-[30px]  gap-10 flex-col p-4" >
                     {navItems.map((item) => (
-                        <div className={cn("text-white font-bold uppercase cursor-pointer", location.pathname === item.path && "text-[#011b2c]" )} onClick={() => goToPage(item.path)}>{item.linkName}</div>
+                        <div key={item.id} className={cn("text-white font-bold uppercase cursor-pointer", location.pathname === item.path && "text-[#011b2c]" )} onClick={() => goToPage(item.path)}>{item.linkName}</div>
                     ))}
                 </ul>
             </div>
