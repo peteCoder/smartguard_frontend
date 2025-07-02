@@ -37,8 +37,8 @@ const ServicesSection = () => {
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <FadeInWhenVisible>
-                <div key={index} className="bg-[#0d4154de] p-6 rounded-xl shadow-lg">
+              <FadeInWhenVisible key={index}>
+                <div className="bg-[#0d4154de] p-6 rounded-xl shadow-lg">
                   {/* Icon on top */}
                   <div className="flex justify-center mb-4">
                     <Icon size={40} color="#4fb3d4" />
