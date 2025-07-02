@@ -8,7 +8,8 @@ import { BrowserRouter } from "react-router";
 import App from './App.tsx';
 
 // CSS
-import './index.css'
+import './index.css';
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

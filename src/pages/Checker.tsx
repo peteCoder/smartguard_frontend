@@ -2,8 +2,13 @@
 import { useState } from "react"
 import { QrCode, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
+import { DomainAnalysisType } from "@/config.types" 
+import { useForm } from "react-hook-form"
 
 import { FadeInWhenVisible } from "@/components/main/FadeInWhenVisible"
+
+// Loader
+import { BeatLoader } from "react-spinners";
 
 // ShadCN UI
 import { Input } from "@/components/ui/input"
@@ -17,11 +22,33 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { BACKEND_API_BASE_URL } from "@/config"
+import { WebsiteDetails } from "@/components/main/WebsiteDetails"
+
+const BASE_API_URL = BACKEND_API_BASE_URL;
+
+
+type DataType = DomainAnalysisType | { extracted_text: string };
 
 const Checker = () => {
-  const [domain, setDomain] = useState("")
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [domain, setDomain] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [websiteData, setWebsiteData] = useState<DomainAnalysisType>()
+
+  const [errorMessageForUpload, setErrorMessageForUpload] = useState({error: false, errorMessage: ""});
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+
+ 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<{ domain: string }>()
 
   const onDrop = (acceptedFiles: File[]) => {
     setUploadedFiles(acceptedFiles)
@@ -31,14 +58,84 @@ const Checker = () => {
     setUploadedFiles([])
   }
 
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { "image/*": [] },
     multiple: false,
   })
 
+  // Submit Text Domain
+  const submitDomain = async (data: { domain: string }) => {
+    console.log("Submitted domain:", data.domain)
+    // Make your API request here
+    const domain = data.domain;
+
+    setIsLoading(true);
+
+    fetch(`${BASE_API_URL}/api/check-domain?domain=${domain}`)
+    .then(res => res.json())
+    .then((data) => {
+      setIsLoading(false);
+      console.log(data);
+      setWebsiteData(data);
+    }).catch((error) => {
+      console.log(error);
+    })
+
+  }
+
+  
+   // Submit QR Code
+  const submitQRCode = async function(){
+
+    if (uploadedFiles.length < 1) {
+      setErrorMessageForUpload({error: true, errorMessage: "Please upload an image here."});
+      return;
+    }
+    setErrorMessageForUpload({error: false, errorMessage: ""});
+    console.log("Thank you for uploading a file. Please wait... ");
+
+
+    const formData = new FormData();
+    formData.append("file", uploadedFiles[0]);
+
+    console.log(uploadedFiles[0]);
+    
+   
+
+    setIsLoading(true);
+    
+    fetch(`${BASE_API_URL}/api/extract-qr`, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then((data) => {
+      setIsLoading(false);
+      console.log(data);
+      
+      if ("domain" in data) {
+        setIsDialogOpen(false);
+      }
+      if ("extracted_text" in data) {
+        setErrorMessageForUpload({error: true, errorMessage: data.extracted_text});
+        return
+      }
+
+      setWebsiteData(data);
+    }).catch((error) => {
+      setIsLoading(false);
+      console.log(error);
+    })
+
+
+
+  }
+
   return (
-    <div className="  px-4 py-10 max-w-4xl mx-auto">
+    <>
+    <form onSubmit={handleSubmit(submitDomain)} className="  px-4 py-10 max-w-4xl mx-auto">
       {/* min-h-screen */}
       {/* Title */}
       <FadeInWhenVisible>
@@ -63,8 +160,15 @@ const Checker = () => {
               <Input
                 id="domain"
                 placeholder="Enter domain name..."
-                value={domain}
-                onChange={(e) => setDomain(e.target.value)}
+                {...register("domain", {
+                  required: "Domain name is required",
+                  pattern: {
+                    value: /^(https?:\/\/)?([\w\-]+\.)+[\w]{2,}(\/.*)?$/,
+                    message: "Enter a valid domain URL"
+                  }
+                })}
+                // value={domain}
+                // onChange={(e) => setDomain(e.target.value)}
                 className="w-full h-[50px] text-white rounded-none placeholder:text-white"
               />
 
@@ -113,22 +217,51 @@ const Checker = () => {
                     )}
                   </div>
 
+                  <div className="">
+                    {errorMessageForUpload.error && (
+                      <div className="text-red-700">
+                        {errorMessageForUpload.errorMessage}
+                      </div>
+                    )}
+                  </div>
+
                   <DialogFooter className="mt-4">
-                    <Button className="h-[50px] w-full" type="submit">
-                      Submit
+                    <Button disabled={isLoading} onClick={() => submitQRCode()} className="h-[50px] w-full" type="submit">
+                      {!isLoading ? <span>Submit</span>  : <BeatLoader color="#fff" />}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
             </div>
+
+            {errors.domain && (
+              <span className="text-red-500 text-sm">{errors.domain.message}</span>
+            )}
           </div>
 
           {/* Main Submit Button */}
-          <Button className="h-[50px] w-full">Submit</Button>
+          <Button type="submit" disabled={isLoading} className="h-[50px] w-full">
+          {!isLoading ? <span>Submit</span>  : <BeatLoader color="#fff" />}
+          </Button>
         </CardContent>
       </Card>
       </FadeInWhenVisible>
+    </form>
+    <div>
+      {/* Here the details will desplay */}
+      {isLoading ? (
+        <div className="min-h-[40vh] flex items-center justify-center">
+          <BeatLoader color="#fff" size={20} />
+        </div>
+      ) : (
+        <div className="min-h-[40vh]">
+          {/* Here the details of the website will be here... */}
+          {websiteData && <WebsiteDetails data={websiteData} />}
+        </div>
+      )}
+      
     </div>
+    </>
   )
 }
 

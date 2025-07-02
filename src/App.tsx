@@ -3,9 +3,11 @@ import { Routes, Route } from "react-router";
 
 import "./App.css";
 
+import MainPagesLayout from "@/layouts/MainPagesLayout";
+
+
 // Pages
 import Home from '@/pages/Home';
-import MainPagesLayout from "@/layouts/MainPagesLayout";
 import About from "@/pages/About";
 import Checker from "@/pages/Checker";
 
