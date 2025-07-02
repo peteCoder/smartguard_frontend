@@ -28,10 +28,10 @@ import { WebsiteDetails } from "@/components/main/WebsiteDetails"
 const BASE_API_URL = BACKEND_API_BASE_URL;
 
 
-type DataType = DomainAnalysisType | { extracted_text: string };
+// type DataType = DomainAnalysisType | { extracted_text: string };
 
 const Checker = () => {
-  const [domain, setDomain] = useState("");
+  // const [domain, setDomain] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [websiteData, setWebsiteData] = useState<DomainAnalysisType>()
