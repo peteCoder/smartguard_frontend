@@ -47,47 +47,47 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
             <ul className="text-sm space-y-1">
               <li>
                 <span className="font-medium">IP Address?</span>{" "}
-                {data.is_ip ? "Yes" : "No"}
+                {data?.is_ip ? "Yes" : "No"}
               </li>
               <li>
                 <span className="font-medium">HTTPS?</span>{" "}
-                {data.has_https ? "Yes" : "No"}
+                {data?.has_https ? "Yes" : "No"}
               </li>
               <li>
                 <span className="font-medium">Shortened URL?</span>{" "}
-                {data.is_shortened ? "Yes" : "No"}
+                {data?.is_shortened ? "Yes" : "No"}
               </li>
               <li>
                 <span className="font-medium">Typosquatting Score:</span>{" "}
-                {data.typosquatting_score}
+                {data?.typosquatting_score}
               </li>
               <li>
                 <span className="font-medium">Domain Age:</span>{" "}
-                {data.domain_age_days !== null ? `${data.domain_age_days} days` : "Unknown"}
+                {data?.domain_age_days !== null ? `${data?.domain_age_days} days` : "Unknown"}
               </li>
             </ul>
           </div>
           <div>
             <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">WHOIS Info</h3>
             {data.whois.error ? (
-              <div className="text-red-400">{data.whois.error}</div>
+              <div className="text-red-400">{data?.whois.error}</div>
             ) : (
               <ul className="text-sm space-y-1">
                 <li>
                   <span className="font-medium">Registrar:</span>{" "}
-                  {data.whois.registrar ?? "-"}
+                  {data?.whois.registrar ?? "-"}
                 </li>
                 <li>
                   <span className="font-medium">Domain Name:</span>{" "}
-                  {data.whois.domain_name ?? "-"}
+                  {data?.whois.domain_name ?? "-"}
                 </li>
                 <li>
                   <span className="font-medium">Owner:</span>{" "}
-                  {data.whois.owner ?? "-"}
+                  {data?.whois.owner ?? "-"}
                 </li>
                 <li>
                   <span className="font-medium">Organization:</span>{" "}
-                  {data.whois.organization ?? "-"}
+                  {data?.whois.organization ?? "-"}
                 </li>
                 <li>
                   <span className="font-medium">Creation Date:</span>{" "}
@@ -99,16 +99,46 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
                 </li>
                 <li>
                   <span className="font-medium">Emails:</span>{" "}
-                  {data.whois.emails?.join(", ") ?? "-"}
+
+                  {typeof data?.whois.emails === "string" ? (
+                      <span>
+                        {data?.whois?.emails}
+                      </span>
+                    ): (
+                      <span>
+                        {data?.whois?.emails?.join(", ") ?? "-"}
+                      </span>
+                    )}
                 </li>
                 <li>
                   <span className="font-medium">Name Servers:</span>{" "}
-                  {data.whois.name_servers?.join(", ") ?? "-"}
+                  {typeof data?.whois.name_servers === "string" ? (
+                      <span>
+                        {data?.whois?.name_servers}
+                      </span>
+                    ): (
+                      <span>
+                        {data?.whois?.name_servers?.join(", ") ?? "-"}
+                      </span>
+                    )}
                 </li>
-                <li>
-                  <span className="font-medium">Status:</span>{" "}
-                  {data.whois.status?.join(", ") ?? "-"}
-                </li>
+                {data.whois.status && (
+                  <li>
+                    <span className="font-medium">Status:</span>{" "}
+                    {typeof data?.whois.status === "string" ? (
+                      <span>
+                        {data?.whois?.status}
+                      </span>
+                    ): (
+                      <span>
+                        {data?.whois?.status?.join(", ") ?? "-"}
+                      </span>
+                    )}
+                    
+                    
+                  </li>
+                )}
+                
               </ul>
             )}
           </div>
@@ -127,7 +157,7 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
                 </li>
                 <li>
                   <span className="font-medium">Safe?</span>{" "}
-                  <SafeBadge safe={data.external_urlscan_check.safe} />
+                  <SafeBadge safe={data.external_urlscan_check?.safe} />
                 </li>
                 <li>
                   <span className="font-medium">Score:</span>{" "}
@@ -139,7 +169,7 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
                     ? data.external_urlscan_check.tags.join(", ")
                     : "-"}
                 </li>
-                {data.external_urlscan_check.screenshot && (
+                {data?.external_urlscan_check.screenshot && (
                   <li className="mt-3">
                     <span className="font-medium block mb-1">Screenshot:</span>
                     <img
