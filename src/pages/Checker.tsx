@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { QrCode, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
-import { DomainAnalysisType } from "@/config.types" 
+import { MLPhishingPrediction } from "@/config.types" 
 import { useForm } from "react-hook-form"
 
 import { FadeInWhenVisible } from "@/components/main/FadeInWhenVisible"
@@ -24,6 +24,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { BACKEND_API_BASE_URL } from "@/config"
 import { WebsiteDetails } from "@/components/main/WebsiteDetails"
+import { useReportStore } from "@/hooks/useReportStore"
 
 const BASE_API_URL = BACKEND_API_BASE_URL;
 
@@ -31,10 +32,11 @@ const BASE_API_URL = BACKEND_API_BASE_URL;
 // type DataType = DomainAnalysisType | { extracted_text: string };
 
 const Checker = () => {
+  const { setReport } = useReportStore();
   // const [domain, setDomain] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [websiteData, setWebsiteData] = useState<DomainAnalysisType>()
+  const [websiteData, setWebsiteData] = useState<MLPhishingPrediction>()
 
   const [errorMessageForUpload, setErrorMessageForUpload] = useState({error: false, errorMessage: ""});
 
@@ -42,12 +44,11 @@ const Checker = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
- 
-
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setValue,
   } = useForm<{ domain: string }>()
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -78,7 +79,9 @@ const Checker = () => {
     .then((data) => {
       setIsLoading(false);
       console.log(data);
+      setReport(data);
       setWebsiteData(data);
+
     }).catch((error) => {
       console.log(error);
     })
@@ -117,12 +120,13 @@ const Checker = () => {
       
       if ("domain" in data) {
         setIsDialogOpen(false);
+        setValue("domain", data.domain);
       }
       if ("extracted_text" in data) {
         setErrorMessageForUpload({error: true, errorMessage: data.extracted_text});
         return
       }
-
+      setReport(data);
       setWebsiteData(data);
     }).catch((error) => {
       setIsLoading(false);
@@ -158,6 +162,7 @@ const Checker = () => {
             <Label htmlFor="domain" className="block text-white mb-4 font-bold">Domain Name</Label>
             <div className="flex items-center md:flex-row flex-col gap-2">
               <Input
+              disabled={isLoading}
                 id="domain"
                 placeholder="Enter domain name..."
                 {...register("domain", {
@@ -167,15 +172,13 @@ const Checker = () => {
                     message: "Enter a valid domain URL"
                   }
                 })}
-                // value={domain}
-                // onChange={(e) => setDomain(e.target.value)}
                 className="w-full h-[50px] text-white rounded-none placeholder:text-white"
               />
-
               {/* QR Modal Trigger */}
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button
+                  disabled={isLoading}
                     variant="outline"
                     className="flex gap-2 h-[50px] items-center whitespace-nowrap rounded-none cursor-pointer"
                   >
@@ -207,7 +210,10 @@ const Checker = () => {
                           className="max-h-48 object-contain rounded-md"
                         />
                         <button
-                          onClick={removeImage}
+                          onClick={() => {
+                            removeImage();
+                            setIsLoading(false);
+                          }}
                           className="absolute top-0 right-0 bg-black/70 rounded-full p-1 text-white hover:bg-black"
                           aria-label="Remove image"
                         >

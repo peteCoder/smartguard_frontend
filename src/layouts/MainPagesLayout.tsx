@@ -5,6 +5,7 @@ import { Outlet } from 'react-router';
 import Footer from '@/components/main/Footer';
 import Navbar from '@/components/main/Navbar';
 import Preloader from "@/components/main/Preloader";
+import ClearReportOnRefresh from "@/components/main/ClearReportOnRefresh";
 
 
 
@@ -25,6 +26,7 @@ const MainPagesLayout = () => {
   return (
     <>
       <Preloader isLoading={loading} />
+      <ClearReportOnRefresh />
       {!loading && (
         <div>
           <Navbar />

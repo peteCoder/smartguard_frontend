@@ -43,4 +43,45 @@ export interface DomainAnalysisType {
     };
 };
 
-  
+
+
+export interface MLPhishingPrediction {
+  domain: string;
+  tld: string;
+  is_phishing: boolean;
+  confidence: number;
+  features_used: {
+    domain_length: number;
+    num_digits: number;
+    num_hyphens: number;
+    has_https: number;
+    num_subdomains: number;
+    tld: number;
+    is_suspicious_tld: number;
+    typosquatting_score: number;
+  };
+  whois: {
+    domain_name: string | null;
+    registrar: string | null;
+    name_servers: string[] | null;
+    status: string[] | string | null;
+    emails: string[] | string | null;
+    owner: string | null;
+    organization: string | null;
+    creation_date: string | null;
+    expiry_date: string | null;
+    age_days: number | null;
+    error: string | null;
+  };
+  deceptive_pattern_detected: boolean;
+  warning: string | null;
+  risk_score: number;
+  risk_level: string;
+}
+
+
+
+
+
+
+

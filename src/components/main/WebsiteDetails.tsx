@@ -2,9 +2,10 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 // import { cn } from "@/lib/utils";
-import { DomainAnalysisType } from "@/config.types";
+import { MLPhishingPrediction } from "@/config.types";
+import { DownloadReportButton } from "./DownloadReportButton";
 
-type DataType = DomainAnalysisType | { extracted_text: string };
+type DataType = MLPhishingPrediction | { extracted_text: string };
 
 export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
   if ("extracted_text" in data) {
@@ -38,32 +39,33 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
             <span className="text-xs text-gray-400">{data.tld && `.${data.tld}`}</span>
           </div>
           <div>
-            <SafeBadge safe={data.safe} />
+            <SafeBadge safe={!data.is_phishing} />
           </div>
         </div>
+        <p>{data.warning}</p>
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">General</h3>
             <ul className="text-sm space-y-1">
-              <li>
+              {/* <li>
                 <span className="font-medium">IP Address?</span>{" "}
-                {data?.is_ip ? "Yes" : "No"}
-              </li>
+                {data?.features_used. ? "Yes" : "No"}
+              </li> */}
               <li>
                 <span className="font-medium">HTTPS?</span>{" "}
-                {data?.has_https ? "Yes" : "No"}
+                {data?.features_used.has_https ? "Yes" : "No"}
               </li>
               <li>
                 <span className="font-medium">Shortened URL?</span>{" "}
-                {data?.is_shortened ? "Yes" : "No"}
+                {data?.features_used.has_https ? "Yes" : "No"}
               </li>
               <li>
                 <span className="font-medium">Typosquatting Score:</span>{" "}
-                {data?.typosquatting_score}
+                {data?.features_used.typosquatting_score}
               </li>
               <li>
                 <span className="font-medium">Domain Age:</span>{" "}
-                {data?.domain_age_days !== null ? `${data?.domain_age_days} days` : "Unknown"}
+                {data?.whois.age_days !== null ? `${data?.whois.age_days} days` : "Unknown"}
               </li>
             </ul>
           </div>
@@ -144,68 +146,11 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
           </div>
         </div>
 
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">URLScan Check</h3>
-            {data.external_urlscan_check.error ? (
-              <div className="text-red-400">{data.external_urlscan_check.error}</div>
-            ) : (
-              <ul className="text-sm space-y-1">
-                <li>
-                  <span className="font-medium">Verdict:</span>{" "}
-                  {data.external_urlscan_check.verdict ?? "-"}
-                </li>
-                <li>
-                  <span className="font-medium">Safe?</span>{" "}
-                  <SafeBadge safe={data.external_urlscan_check?.safe} />
-                </li>
-                <li>
-                  <span className="font-medium">Score:</span>{" "}
-                  {data.external_urlscan_check.score ?? "-"}
-                </li>
-                <li>
-                  <span className="font-medium">Tags:</span>{" "}
-                  {data.external_urlscan_check.tags?.length
-                    ? data.external_urlscan_check.tags.join(", ")
-                    : "-"}
-                </li>
-                {data?.external_urlscan_check.screenshot && (
-                  <li className="mt-3">
-                    <span className="font-medium block mb-1">Screenshot:</span>
-                    <img
-                      src={data.external_urlscan_check.screenshot}
-                      alt="URLScan Screenshot"
-                      className="max-w-xs rounded border border-gray-800 shadow"
-                    />
-                  </li>
-                )}
-              </ul>
-            )}
+        
+          <div className="h-[20vh] flex items-center justify-center">
+            <DownloadReportButton />
           </div>
-          <div>
-            <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">Google Safe Browsing</h3>
-            {!data.external_google_safe_check ? (
-              <div className="text-gray-400">No data</div>
-            ) : data.external_google_safe_check.error ? (
-              <div className="text-red-400">{data.external_google_safe_check.error}</div>
-            ) : (
-              <ul className="text-sm space-y-1">
-                <li>
-                  <span className="font-medium">Safe?</span>{" "}
-                  <SafeBadge safe={data.external_google_safe_check.safe} />
-                </li>
-                <li>
-                  <span className="font-medium">Threats:</span>{" "}
-                  {data.external_google_safe_check.details?.length
-                    ? data.external_google_safe_check.details
-                        .map((d) => d.threatType)
-                        .join(", ")
-                    : "None"}
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
+        
       </CardContent>
     </Card>
   );
