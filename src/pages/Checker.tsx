@@ -68,7 +68,7 @@ const Checker = () => {
 
   // Submit Text Domain
   const submitDomain = async (data: { domain: string }) => {
-    console.log("Submitted domain:", data.domain)
+    // console.log("Submitted domain:", data.domain)
     // Make your API request here
     const domain = data.domain;
 
@@ -78,7 +78,7 @@ const Checker = () => {
     .then(res => res.json())
     .then((data) => {
       setIsLoading(false);
-      console.log(data);
+      // console.log(data);
       setReport(data);
       setWebsiteData(data);
 
@@ -97,13 +97,13 @@ const Checker = () => {
       return;
     }
     setErrorMessageForUpload({error: false, errorMessage: ""});
-    console.log("Thank you for uploading a file. Please wait... ");
+    // console.log("Thank you for uploading a file. Please wait... ");
 
 
     const formData = new FormData();
     formData.append("file", uploadedFiles[0]);
 
-    console.log(uploadedFiles[0]);
+    // console.log(uploadedFiles[0]);
     
    
 
@@ -116,7 +116,7 @@ const Checker = () => {
     .then(res => res.json())
     .then((data) => {
       setIsLoading(false);
-      console.log(data);
+      // console.log(data);
       
       if ("domain" in data) {
         setIsDialogOpen(false);
