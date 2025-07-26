@@ -260,7 +260,7 @@ const Checker = () => {
           <BeatLoader color="#fff" size={20} />
         </div>
       ) : (
-        <div className="min-h-[40vh]">
+        <div className="min-h-[40vh] p-3">
           {/* Here the details of the website will be here... */}
           {websiteData && <WebsiteDetails data={websiteData} />}
         </div>
