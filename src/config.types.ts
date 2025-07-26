@@ -59,6 +59,7 @@ export interface MLPhishingPrediction {
     tld: number;
     is_suspicious_tld: number;
     typosquatting_score: number;
+    is_shortened: number;
   };
   whois: {
     domain_name: string | null;
