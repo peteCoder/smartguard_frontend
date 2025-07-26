@@ -74,7 +74,7 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
 
         {/* WHOIS Info Table */}
 <div>
-  <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">WHOIS Information</h3>
+  <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">Website Information</h3>
   {data.whois.error ? (
     <p className="text-red-400">{data.whois.error}</p>
   ) : (
