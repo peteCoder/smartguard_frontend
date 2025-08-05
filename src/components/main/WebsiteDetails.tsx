@@ -48,6 +48,25 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
         {/* General Info Table */}
         <div>
           <h3 className="text-lg text-[#33b4df] mb-2 font-semibold">General Information</h3>
+          {/* Confidence Score */}
+          <div className="space-y-1 my-10">
+            <h3 className="text-sm font-medium text-[#33b4df]">Model Confidence</h3>
+            <div className="relative h-4 w-[60vw] bg-gray-800 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${
+                  data.confidence > 0.8
+                    ? "bg-green-500"
+                    : data.confidence > 0.5
+                    ? "bg-yellow-400"
+                    : "bg-red-500"
+                }`}
+                style={{ width: `${Math.round(data.confidence * 100)}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-300">
+              {Math.round(data.confidence * 100)}% confidence the domain is {data.is_phishing ? "malicious" : "safe"}.
+            </p>
+          </div>
           <table className="w-full text-sm table-auto border-collapse border border-gray-700">
             <tbody>
               <tr className="border-b border-gray-700">
