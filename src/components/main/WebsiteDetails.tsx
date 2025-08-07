@@ -17,14 +17,23 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
     );
   }
 
-  const SafeBadge = ({ safe }: { safe: boolean | null }) =>
-    safe === null ? (
+  const SafeBadge = ({ safe, error }: { safe: boolean | null; error: string | null }) => {
+    if (error) {
+      return (
+        <Badge className="bg-red-600">
+          Unsafe (Error)
+        </Badge>
+      )
+    }
+
+    return safe === null ? (
       <Badge variant="secondary">Unknown</Badge>
     ) : safe ? (
       <Badge className="bg-green-600">Safe</Badge>
     ) : (
       <Badge className="bg-red-600">Unsafe</Badge>
     );
+  };
 
   return (
     <Card className="bg-[#11394b] border-0 my-8 w-full mx-auto shadow-lg text-white">
@@ -36,7 +45,11 @@ export const WebsiteDetails: React.FC<{ data: DataType }> = ({ data }) => {
             <span className="text-xs text-gray-400">{data.tld && `.${data.tld}`}</span>
           </div>
           <div>
-            <SafeBadge safe={!data.is_phishing} />
+            {/* <SafeBadge safe={!data.is_phishing} error={data?.whois?.error} /> */}
+            <SafeBadge
+              safe={data.whois?.error ? false : !data.is_phishing}
+              error={data?.whois?.error}
+            />
           </div>
         </div>
 
